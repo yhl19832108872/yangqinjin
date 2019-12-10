@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+   </title>
+   <style type="text/css">
+   	.head{
+   		width:100%;
+   		height:30px;
+   		background-color:#ccc;
+        }
+    .head>img{
+    	 position: absolute;
+    	 left: 220px;
+    	 top: 15px;
+    	}
+    .box{
+    	width: 800px;
+    	height:30px ;
+    	margin: 5px auto;
+    	border: 2px; 
+    	overflow: hidden;
+    	   }
+    .zhongjian{
+    	height: 390px;
+    	width: 1200px;
+    	margin: 10px auto;
+    	position: relative;
+    	border: 1px ;
+    	overflow: hidden;
+    }
+    .head p{
+    	font-size:10px;
+    	color: red;
+    	line-height:30px;
+    	position: relative;
+    	left: 800px;
+    	top: -9px;
+    }
+    .slider{
+    	width: 8400px;
+    	position: absolute;
+    	left: -1200px;
+
+    }
+    .slide{
+    	width: 1200px;
+    	 float: left; 
+    	overflow: hidden;
+    }
+    .zhongjian>
+    .zuo{
+    	display: block;
+    	width: 30px;
+    	height: 50px;
+    	text-align: center;
+    	cursor: pointer;
+    	color: #ccc;
+    	top: 175px;
+    	line-height: 50px;
+    	background-color: rgb(255, 0, 0);
+    	font-size: 30px;
+    	position: absolute;
+    	opacity: 0;
+    	left:30px;
+
+    }
+    .you{
+    	display: block;
+    	width: 30px;
+    	height: 50px;
+    	text-align: center;
+    	cursor: pointer;
+    	color: #ccc;
+    	top: 175px;
+    	line-height: 50px;
+    	background-color: rgb(255, 0, 0);
+    	font-size: 30px;
+    	position: absolute;
+    	opacity: 0;
+    	right: 30px;
+    }
+    ul{
+	   position: absolute;
+	   bottom: 0px;
+	   height: 30px;
+	   left: 480px;
+    }
+    li{
+    	padding-left: 6px;
+    	padding-right: 6px;
+    	margin: 0 10px;
+    	display: inline;
+    	list-style: none;
+        border-radius:50%; 
+    	text-align: center;
+    	background-color: #ccc;
+    }
+  .active{
+  	background-color: red;
+  }
+
+   </style>
+
+</head>
+<body>
+	<div class="head">
+		<img src="images/a15.png">
+		<div class="box">
+		     <p id="p">[温馨提示！]最近有不少人在网上骗人，请大家注意！！！</p>
+	    </div>
+	</div>
+	<div class="zhongjian">
+		
+			<div class="slider" id="slider">
+				<div class="slide" >
+		            <img src="images/b5.png">
+		        </div>
+			     <div class="slide">
+			        <img src="images/b1.png">
+			    </div>
+			    <div class="slide">
+			        <img src="images/b2.png">
+			    </div>
+			    <div class="slide">
+			        <img src="images/b3.png">
+			    </div>
+			    <div class="slide">
+			        <img src="images/b4.png">
+			    </div>
+			    <div class="slide">
+			        <img src="images/b5.png">
+			    </div>
+			    <div class="slide">
+			        <img src="images/b1.png">
+			    </div>
+		    </div>
+
+		<ul>
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+		<div class="zuo">
+			<
+		</div>
+		<div class="you">
+			>
+
+		</div>
+	</div>    
+    <script type="text/javascript">
+	    var button=document.getElementsByTagName("li");
+	    var index = 1;
+	    var slider=document.getElementsByClassName("slider")[0];
+    	var zhongjian=document.getElementsByClassName("zhongjian")[0];
+    	var left=document.getElementsByClassName("zuo")[0];
+    	var right=document.getElementsByClassName("you")[0];
+    	var p=document.getElementById("p");
+    	var isMoving = false;
+    	var timer;
+		function getStyle(obj, attr){
+			if(obj.currentStyle){
+				return obj.currentStyle[attr];
+			} else {
+				return getComputedStyle(obj, null)[attr];
+			}
+		}
+		function animate(obj,json,callback){
+			clearInterval(obj.timer);
+			obj.timer = setInterval(function(){
+				var isStop = true;
+				for(var attr in json){
+					var now = 0;
+					if(attr == 'opacity'){
+						now = parseInt(getStyle(obj,attr)*100);
+					}else{
+						now = parseInt(getStyle(obj,attr));
+					}
+					var speed = (json[attr] - now) / 8;
+					speed = speed>0?Math.ceil(speed):Math.floor(speed);
+					var cur = now + speed;
+					if(attr == 'opacity'){
+						obj.style[attr] = cur / 100;
+					}else{
+						obj.style[attr] = cur + 'px';
+					}
+					if(json[attr] !== cur){
+						isStop = false;
+					}
+				}
+				if(isStop){
+					clearInterval(obj.timer);
+					callback&&callback();
+				}
+			}, 30)
+		}
+		zhongjian.onmouseover=function(){
+		animate(left,{opacity:50});
+		animate(right,{opacity:50});
+		   
+		}
+		zhongjian.onmouseout=function(){
+		animate(left,{opacity:0});
+		animate(right,{opacity:0});
+		}
+		var i=800;
+		setInterval(function(){
+			p.style.left=i+"px";
+			i--;
+			if(i<-230)
+				i+=800;
+		},15);
+
+		function next(){
+		   index++;
+		   turnRed();
+		   animate(slider,{left:-1200*index},function(){
+		   	  if(index==6){
+		   	  	slider.style.left="-1200px";
+		   	  	index=1;
+		   	  }
+		   })
+		}
+		function former(){
+			index--;
+			turnRed();
+			animate(slider,{left:-1200*index},function(){
+				if(index==0){
+					slider.style.left="-6000px";
+					index=5;
+				}
+			})
+		}
+		 
+		var zuo=document.getElementsByClassName("zuo")[0];
+		var you=document.getElementsByClassName("you")[0];
+		zuo.onclick=former;
+		you.onclick=next;
+	    function turnRed(){
+	    	for(var i = 0;i<button.length;i++){
+	    		button[i].className="";
+	    	}
+	    	
+	    	if(index==6){
+	    	button[0].className="active";
+	    	}
+	    	else if(index==0){
+	    	button[4].className="active";
+	    	}
+	    	else{
+	    	  button[index-1].className="active";
+	        }
+	    }
+	    button[0].onclick=function(){
+	    	index=1;
+	    	animate(slider,{left:-1200*index});
+	    	turnRed();
+	    }
+	    button[1].onclick=function(){
+	    	index=2;
+	    	animate(slider,{left:-1200*index});
+	    	turnRed();
+	    }
+	    button[2].onclick=function(){
+	    	index=3;
+	    	animate(slider,{left:-1200*index});
+	    	turnRed();
+	    }
+	    button[3].onclick=function(){
+	    	index=4;
+	    	animate(slider,{left:-1200*index});
+	    	turnRed();
+	    }
+	    button[4].onclick=function(){
+	    	index=5;
+	    	animate(slider,{left:-1200*index});
+	    	turnRed();
+	    }
+    
+ </script>
+</body>
+</html>
